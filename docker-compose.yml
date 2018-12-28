@@ -1,0 +1,44 @@
+version: '3'
+services:
+    nitewatch-service:
+        container_name: nitewatch-container
+        build: .
+        image: jose-nightwatch
+        volumes:
+            - .:/app/
+            - /app/node_modules
+        tty: true
+        depends_on:
+            - selenium-hub
+            - firefox
+            - chrome
+
+    selenium-hub:
+        image: selenium/hub
+        container_name: hub
+        ports:
+            - '4444:4444'
+
+    chrome:
+        image: selenium/node-chrome-debug
+        depends_on:
+            - selenium-hub
+        environment:
+            - HUB_HOST=hub
+            - HUB_PORT=4444
+        ports:
+            - '5901:5900'
+        privileged: true
+        shm_size: '2g'
+
+    firefox:
+        image: selenium/node-firefox-debug
+        depends_on:
+            - selenium-hub
+        environment:
+            - HUB_HOST=hub
+            - HUB_PORT=4444
+        ports:
+            - '5902:5900'
+        shm_size: '2g'
+        privileged: true
