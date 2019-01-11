@@ -11,3 +11,7 @@ steps:
   image: node
   commands:
   - npm test
+
+trigger:
+  branch:
+  - master
