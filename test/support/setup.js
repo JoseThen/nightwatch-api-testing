@@ -1,5 +1,5 @@
 const { setDefaultTimeout, AfterAll, BeforeAll } = require('cucumber');
-const { createSession, closeSession } = require('nightwatch-api');
+const { createSession, closeSession, client } = require('nightwatch-api');
 const { stopWebDriver } = require('nightwatch-api');
 
 setDefaultTimeout(60000);
@@ -9,6 +9,7 @@ BeforeAll(async () => {
 });
 
 AfterAll(async () => {
-  await closeSession();
+  await client.end();
   await stopWebDriver();
+  await closeSession();
 });
